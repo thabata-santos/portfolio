@@ -1,0 +1,39 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="neonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Fundo -->
+  <rect width="64" height="64" rx="16" fill="#0b1120"/>
+
+  <!-- T arredondado -->
+  <path d="M16 20 H48
+           M32 20 V46"
+        stroke="url(#neonGradient)"
+        stroke-width="6"
+        stroke-linecap="round"
+        filter="url(#glow)"/>
+
+  <!-- S arredondado -->
+  <path d="M44 26
+           C40 20, 24 20, 24 28
+           C24 36, 44 34, 44 42
+           C44 50, 28 50, 24 44"
+        fill="none"
+        stroke="url(#neonGradient)"
+        stroke-width="6"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        filter="url(#glow)"/>
+</svg>
