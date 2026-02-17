@@ -31,7 +31,7 @@ const items = [
 
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 pointer-events-none">
+    <nav className="fixed top-0 left-0 w-full z-50">
       <div className="relative max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
 
         <div className="flex flex-col leading-tight">

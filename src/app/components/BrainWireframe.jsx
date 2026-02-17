@@ -64,7 +64,7 @@ export default function BrainWireframe() {
   return (
     <div
       ref={mountRef}
-      className="absolute inset-0 z-0 opacity-70"
+      className="fixed inset-0 z-0 opacity-70"
     />
   );
 }

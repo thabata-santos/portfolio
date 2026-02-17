@@ -15,37 +15,60 @@ export default function Home() {
   useReveal();
 
 useEffect(() => {
+  if (window.innerWidth < 768) return;
+
   const cursor = document.createElement("div");
   cursor.className = "custom-cursor";
   document.body.appendChild(cursor);
 
-  document.addEventListener("mousemove", (e) => {
+  const move = (e) => {
     cursor.style.left = e.clientX + "px";
     cursor.style.top = e.clientY + "px";
-  });
+  };
+
+  document.addEventListener("mousemove", move);
+
+  return () => {
+    document.removeEventListener("mousemove", move);
+    document.body.removeChild(cursor);
+  };
 }, []);
 
   return (
-    <main className="relative min-h-screen bg-[#0b1120] overflow-x-hidden">
+    <main className="relative min-h-screen bg-[#0b1120] overflow-x-hidden flex flex-col">
 
       {/* Navbar */}
       <Navbar language={language} setLanguage={setLanguage} />
+<div className="h-24 md:h-32" />
 
 
      {/* BACKGROUND */}
 <div className="fixed inset-0 z-0 pointer-events-none">
   <NeuralBackground />
-  <BrainBackground />
+  
+  <div className="hidden md:block">
+    <BrainBackground />
+  </div>
 </div>
 
+
     {/* CONTEÚDO */}
-    <div className="relative z-10">
+    <div className="relative z-10 flex flex-col flex-1 min-h-screen">
 
 {/* ABOUT SECTION */}
 <section
   id="sobre"
-  className="relative min-h-screen flex items-start pt-40 px-10 z-10"
+  className="
+    relative
+    z-10
+    px-6
+    pt-24
+    pb-32
+    md:px-10
+    md:pt-40
+  "
 >
+
   <div className="glass-card interactive-card about-card max-w-sm w-full">
     <h2 className="font-title text-4xl font-semibold text-cyan-400 mb-6">
       {t.about.title}
@@ -58,7 +81,7 @@ useEffect(() => {
 </section>
 
       {/* SKILLS */}
-      <section className="flex justify-center px-6 pb-32 reveal">
+      <section className="flex justify-center px-6 md:px-10 pb-32 reveal">
         <div className="grid md:grid-cols-2 gap-8 max-w-5xl w-full">
 
           <div className="glass-card interactive-card">
@@ -88,7 +111,7 @@ useEffect(() => {
 
 <section
   id="projetos"
-  className="relative min-h-screen flex flex-col justify-center items-center px-10 z-10 reveal"
+  className="relative flex flex-col justify-center items-center px-6 md:px-10 z-10 reveal"
 >
   <h2 className="font-title text-5xl font-semibold text-cyan-400 mb-16">
     {t.projects.title}
@@ -111,7 +134,7 @@ useEffect(() => {
 
 <section
   id="certificacoes"
-  className="relative min-h-screen flex flex-col justify-center items-center px-10 z-10 reveal"
+  className="relative flex flex-col justify-center items-center px-6 md:px-10 z-10 reveal"
 >
   <h2 className="font-title text-5xl font-semibold text-cyan-400 mb-16">
     {t.certifications.title}
@@ -132,7 +155,7 @@ useEffect(() => {
 
 <section
   id="contato"
-  className="relative min-h-screen flex flex-col justify-center items-center px-10 z-10 reveal"
+  className="relative flex flex-col justify-center items-center px-6 md:px-10 py-32 z-10 reveal"
 >
   <h2 className="font-title text-5xl font-semibold text-cyan-400 mb-16">
     {t.contact.title}
