@@ -110,7 +110,7 @@ const translations = {
         "AWS Cloud Practitioner (Em andamento)",
         "Programa AWS re/Start",
         "Estudante de Engenharia da Computação",
-        "Inglês Avançado – Meta C1 Cambridge",
+        "Inglês Intermediário – Meta C1 Cambridge",
       ],
     },
 
