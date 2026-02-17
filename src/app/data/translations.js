@@ -50,7 +50,7 @@ const translations = {
         "AWS Cloud Practitioner (In Progress)",
         "AWS re/Start Program",
         "Computer Engineering Student",
-        "Advanced English – Cambridge Path (C1 Goal)",
+        "Intermediate English – Cambridge Path (C1 Goal)",
       ],
     },
 
