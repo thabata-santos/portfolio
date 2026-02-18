@@ -94,7 +94,7 @@ export default function NeuralBackground() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed top-0 left-0 w-full h-full"
+      className="fixed top-0 left-0 w-full h-full opacity-40 md:opacity-100" // Reduced opacity on mobile
     />
   );
 }

@@ -107,7 +107,7 @@ export default function BrainBackground() {
   return (
     <div
       ref={mountRef}
-      className="fixed inset-0 z-10 pointer-events-none"
+      className="fixed inset-0 z-0 opacity-20 md:opacity-70 scale-115 md:scale-100 transition-all duration-700 pointer-events-none"
     />
   );
 }

@@ -1,4 +1,6 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --background: #ffffff;
@@ -15,7 +17,14 @@
 
 body {
   font-family: 'Space Grotesk', sans-serif;
-  cursor: none;
+  cursor: auto;
+}
+
+/* Hide default cursor only on desktop */
+@media (min-width: 768px) {
+  body {
+    cursor: none;
+  }
 }
 
 .font-title {
@@ -26,14 +35,54 @@ body {
 .glass-card {
   background: rgba(15, 23, 42, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 3rem;
+  padding: 1.5rem;
+  /* Mobile first: smaller padding */
   border-radius: 20px;
   /* Removed will-change to prevent GPU memory pressure */
+}
+
+@media (min-width: 768px) {
+  .glass-card {
+    padding: 3rem;
+    /* Desktop: original padding */
+  }
 }
 
 @supports (backdrop-filter: blur(4px)) {
   .glass-card {
     backdrop-filter: blur(4px);
+  }
+}
+
+/* Mobile Elegance Refinement: Subtle Card Glow & Typography Softening */
+@media (max-width: 768px) {
+  .glass-card {
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(34, 211, 238, 0.08);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  }
+
+  h2 {
+    letter-spacing: 0.5px;
+  }
+}
+
+/* ... existing code ... */
+
+.about-card {
+  width: 100%;
+  max-width: 360px;
+  min-height: auto;
+  /* Mobile: specific height removed */
+  padding: 28px;
+  border-radius: 22px;
+}
+
+@media (min-width: 768px) {
+  .about-card {
+    min-height: 400px;
+    /* Restore for desktop if needed, or keep auto */
   }
 }
 
@@ -44,7 +93,8 @@ body {
 
 .interactive-card:hover {
   transform: translateZ(0) scale(1.02);
-  box-shadow: 0 0 30px rgba(139, 92, 246, 0.2);
+  border-color: rgba(139, 92, 246, 0.5);
+  box-shadow: 0 0 50px rgba(139, 92, 246, 0.4);
   will-change: transform;
   /* Only promote on hover */
 }
@@ -64,24 +114,41 @@ body {
 }
 
 
+/* ===== PREMIUM NEON CURSOR ===== */
+
 .custom-cursor {
   position: fixed;
-  width: 20px;
-  height: 20px;
-  background: radial-gradient(circle, #22d3ee 0%, transparent 70%);
+  width: 18px;
+  height: 18px;
+  background: radial-gradient(circle, #22d3ee 0%, rgba(34, 211, 238, 0.3) 40%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 99999;
   mix-blend-mode: screen;
+  transform: translate(-50%, -50%) scale(1);
+  transition: transform 0.15s ease-out, box-shadow 0.2s ease-out;
+  display: none;
 }
 
-.about-card {
-  width: 100%;
-  max-width: 360px;
-  min-height: 400px;
-  padding: 28px;
-  border-radius: 22px;
+/* Enable only on desktop */
+@media (min-width: 768px) {
+  .custom-cursor {
+    display: block;
+  }
+
+  body {
+    cursor: none;
+  }
 }
+
+/* Hover interaction state */
+.custom-cursor.active {
+  transform: translate(-50%, -50%) scale(1.8);
+  box-shadow: 0 0 25px rgba(34, 211, 238, 0.8),
+    0 0 60px rgba(34, 211, 238, 0.4);
+}
+
+
 
 @media (max-width: 768px) {
   #sobre {
@@ -100,6 +167,35 @@ html {
   scroll-behavior: smooth;
 }
 
-body {
-  overflow-x: hidden;
+
+/* FALLBACK: Precise Navbar Control */
+@media (max-width: 768px) {
+  .nav-desktop {
+    display: none !important;
+  }
+
+  .nav-mobile-btn {
+    display: block !important;
+  }
+}
+
+@media (min-width: 769px) {
+
+  /* 769px to ensure no overlap */
+  .nav-desktop {
+    display: flex !important;
+  }
+
+  .nav-mobile-btn {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .glass-card {
+    background: rgba(15, 23, 42, 0.45);
+    border: 1px solid rgba(34, 211, 238, 0.08);
+    box-shadow: 0 0 18px rgba(34, 211, 238, 0.08);
+    backdrop-filter: blur(6px);
+  }
 }

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 export default function useReveal() {
   useEffect(() => {
     const handleReveal = () => {

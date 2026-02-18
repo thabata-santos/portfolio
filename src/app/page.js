@@ -31,32 +31,44 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (typeof window === 'undefined' || window.innerWidth < 768) return;
+    if (window.innerWidth < 768) return;
 
-    const cursor = document.createElement("div");
-    cursor.className = "custom-cursor";
-    // Initialize off-screen or at 0,0
-    cursor.style.transform = "translate3d(0, 0, 0)";
-    document.body.appendChild(cursor);
+    const cursor = document.querySelector(".custom-cursor");
 
-    const move = (e) => {
-      // Use requestAnimationFrame for smoother following if needed, 
-      // but direct transform update is usually fast enough and better than layout thrashing top/left
-      cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+    // Safety check in case component unmounts or selector fails
+    if (!cursor) return;
+
+    const moveCursor = (e) => {
+      cursor.style.left = e.clientX + "px";
+      cursor.style.top = e.clientY + "px";
     };
 
-    document.addEventListener("mousemove", move);
+    const activate = () => cursor.classList.add("active");
+    const deactivate = () => cursor.classList.remove("active");
+
+    document.addEventListener("mousemove", moveCursor);
+
+    const interactiveElements = document.querySelectorAll(
+      "a, button, .interactive-card"
+    );
+
+    interactiveElements.forEach((el) => {
+      el.addEventListener("mouseenter", activate);
+      el.addEventListener("mouseleave", deactivate);
+    });
 
     return () => {
-      document.removeEventListener("mousemove", move);
-      if (document.body.contains(cursor)) {
-        document.body.removeChild(cursor);
-      }
+      document.removeEventListener("mousemove", moveCursor);
+      interactiveElements.forEach((el) => {
+        el.removeEventListener("mouseenter", activate);
+        el.removeEventListener("mouseleave", deactivate);
+      });
     };
   }, []);
 
   return (
-    <main className="relative min-h-screen bg-[#0b1120] flex flex-col">
+    <main className="relative min-h-screen overflow-x-hidden flex flex-col bg-gradient-to-b from-[#0b1120] via-[#0a0f1d] to-[#0b1120]">
+      <div className="custom-cursor"></div>
 
       {/* Navbar */}
       <Navbar language={language} setLanguage={setLanguage} />
@@ -67,11 +79,7 @@ export default function Home() {
       <div className="fixed inset-0 z-0 pointer-events-none">
         <NeuralBackground />
 
-        {isDesktop && (
-          <div className="hidden md:block">
-            <BrainBackground />
-          </div>
-        )}
+        <BrainBackground />
       </div>
 
 
@@ -82,30 +90,34 @@ export default function Home() {
         <section
           id="sobre"
           className="
-    relative
-    z-10
-    px-6
-    pt-24
-    pb-32
-    md:px-10
-    md:pt-40
-  "
+        relative
+        z-10
+        px-4
+        pt-4
+        pb-16
+        md:px-6
+        md:pt-12
+        md:pb-32
+        "
         >
 
-          <div className="glass-card interactive-card about-card max-w-sm w-full">
-            <h2 className="font-title text-4xl font-semibold text-cyan-400 mb-6">
-              {t.about.title}
-            </h2>
+          <div className="flex flex-col md:flex-row items-center md:items-start justify-center md:justify-start gap-10 md:gap-20 px-0 md:px-0">
+            <div className="glass-card interactive-card about-card w-full md:w-[420px]">
+              <h2 className="font-title text-3xl md:text-4xl font-semibold text-cyan-400 mb-6">
+                {t.about.title}
+              </h2>
 
-            <p className="text-[#cbd5e1] leading-relaxed text-lg">
-              {t.about.description}
-            </p>
+              <p className="text-[#cbd5e1] leading-relaxed text-base md:text-lg">
+                {t.about.description}
+              </p>
+            </div>
           </div>
         </section>
 
         {/* SKILLS */}
-        <section id="skills-section" className="flex justify-center px-6 md:px-10 pb-32 reveal">
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl w-full">
+        {/* SKILLS - Added min-h to ensure visibility and separate from About */}
+        <section id="skills-section" className="flex justify-center items-center min-h-[50vh] px-4 md:px-10 py-24 md:py-32 reveal">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl w-full">
 
             <div id="hard-skills" className="glass-card interactive-card">
               <h3 className="font-title text-xl font-semibold mb-4 text-cyan-400">
@@ -134,19 +146,19 @@ export default function Home() {
 
         <section
           id="projetos"
-          className="relative flex flex-col justify-center items-center px-6 md:px-10 z-10 reveal"
+          className="relative flex flex-col justify-center items-center min-h-screen px-4 md:px-10 py-24 md:py-32 z-10 reveal"
         >
-          <h2 className="font-title text-5xl font-semibold text-cyan-400 mb-16">
+          <h2 className="font-title text-xl md:text-6xl tracking-wide opacity-85 md:opacity-100 font-semibold text-cyan-400 mb-10 md:mb-16">
             {t.projects.title}
           </h2>
 
-          <div className="grid md:grid-cols-2 gap-12 max-w-6xl w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-6xl w-full">
             {t.projects.items.map((project, index) => (
               <div key={index} className="glass-card interactive-card">
-                <h3 className="font-title text-2xl font-semibold text-[#93c5fd] mb-4">
+                <h3 className="font-title text-xl md:text-2xl font-semibold text-cyan-300/90 mb-4">
                   {project.title}
                 </h3>
-                <p className="text-[#cbd5e1]">
+                <p className="text-[#cbd5e1] text-sm md:text-base">
                   {project.description}
                 </p>
               </div>
@@ -157,9 +169,9 @@ export default function Home() {
 
         <section
           id="certificacoes"
-          className="relative flex flex-col justify-center items-center px-6 md:px-10 z-10 reveal"
+          className="relative flex flex-col justify-center items-center min-h-screen px-4 md:px-10 py-24 md:py-32 z-10 reveal"
         >
-          <h2 className="font-title text-5xl font-semibold text-cyan-400 mb-16">
+          <h2 className="font-title text-xl md:text-6xl tracking-wide opacity-85 md:opacity-100 font-semibold text-cyan-400 mb-10 md:mb-16">
             {t.certifications.title}
           </h2>
 
@@ -178,13 +190,13 @@ export default function Home() {
 
         <section
           id="contato"
-          className="relative flex flex-col justify-center items-center px-6 md:px-10 py-32 z-10 reveal"
+          className="relative flex flex-col justify-center items-center min-h-screen px-4 md:px-10 py-24 md:py-32 z-10 reveal"
         >
-          <h2 className="font-title text-5xl font-semibold text-cyan-400 mb-16">
+          <h2 className="font-title text-xl md:text-6xl tracking-wide opacity-85 md:opacity-100 font-semibold text-cyan-400 mb-10 md:mb-16">
             {t.contact.title}
           </h2>
 
-          <div className="flex gap-8">
+          <div className="flex gap-6 mt-6 justify-center md:gap-10">
 
             <a
               href="https://www.linkedin.com/in/thabata-santos"
@@ -193,7 +205,7 @@ export default function Home() {
             >
               <img
                 src="/icons/linkedin.svg"
-                className="w-8 h-8 hover:scale-110 transition"
+                className="w-8 h-8 text-cyan-400 hover:scale-110 transition-all duration-300"
                 alt="LinkedIn"
               />
             </a>
@@ -205,7 +217,7 @@ export default function Home() {
             >
               <img
                 src="/icons/github.svg"
-                className="w-8 h-8 hover:scale-110 transition"
+                className="w-8 h-8 text-cyan-400 hover:text-cyan-300 drop-shadow-[0_0_8px_rgba(34,211,238,0.6)] hover:scale-110 transition duration-300"
                 alt="GitHub"
               />
             </a>
@@ -213,7 +225,7 @@ export default function Home() {
             <a href="mailto:thabata@thabatasantos.com">
               <img
                 src="/icons/email.svg"
-                className="w-8 h-8 hover:scale-110 transition"
+                className="w-8 h-8 text-cyan-400 hover:text-cyan-300 drop-shadow-[0_0_8px_rgba(34,211,238,0.6)] hover:scale-110 transition duration-300"
                 alt="Email"
               />
             </a>
