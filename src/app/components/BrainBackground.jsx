@@ -32,19 +32,19 @@ export default function BrainBackground() {
     let brain;
 
     loader.load("/models/brain.glb", (gltf) => {
-      brain = gltf.scene; 
-      brain.rotation.set(0,0,0); // vira ele corretamente
+      brain = gltf.scene;
+      brain.rotation.set(0, 0, 0); // vira ele corretamente
       brain.scale.set(0.9, 0.9, 0.9); // <<< tamanho ideal
       brain.position.set(0, -0.1, 0);
 
       brain.traverse((child) => {
         if (child.isMesh) {
           child.material = new THREE.MeshBasicMaterial({
-    color: 0x9b5cff,
-    wireframe: true,
-    transparent: true,
-    opacity: 0.15,
-});
+            color: 0x9b5cff,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.15,
+          });
         }
       });
 
@@ -52,15 +52,16 @@ export default function BrainBackground() {
     });
 
     let time = 0;
+    let frameId;
 
     function animate() {
-      requestAnimationFrame(animate);
+      frameId = requestAnimationFrame(animate);
 
       if (brain) {
         time += 0.01;
 
         brain.rotation.y += 0.0015;
-      
+
         // pulsação sutil
         const scale = 1.2 + Math.sin(time) * 0.02;
         brain.scale.set(scale, scale, scale);
@@ -80,9 +81,24 @@ export default function BrainBackground() {
     window.addEventListener("resize", handleResize);
 
     return () => {
+      cancelAnimationFrame(frameId);
       window.removeEventListener("resize", handleResize);
       if (mount && renderer.domElement) {
         mount.removeChild(renderer.domElement);
+      }
+
+      // Memory cleanup
+      if (brain) {
+        brain.traverse((child) => {
+          if (child.isMesh) {
+            child.geometry.dispose();
+            if (Array.isArray(child.material)) {
+              child.material.forEach(m => m.dispose());
+            } else {
+              child.material.dispose();
+            }
+          }
+        });
       }
       renderer.dispose();
     };
